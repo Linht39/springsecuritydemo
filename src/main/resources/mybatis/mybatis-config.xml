@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--Mybatis全局设置-->
+<configuration>
+    <settings>
+        <!--开启二级缓存-->
+        <setting name="cacheEnabled" value="true"/>
+        <!--开启懒加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--关闭积极加载-->
+        <setting name="aggressiveLazyLoading" value="false"/>
+        <!--触发懒加载的方法-->
+        <setting name="lazyLoadTriggerMethods" value=""/>
+        <!--下划线到驼峰命名的匹配-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <!--配置别名，以便mapper文件中使用-->
+    <typeAliases>
+        <!--别名不区分大小写-->
+        <!--<typeAlias type="edu.springbootstudy.bean.Student" alias="student" />-->
+        <!--批量定义类别名-->
+        <package name="edu.tust.springsecuritydemo.entity"/>
+    </typeAliases>
+</configuration>
