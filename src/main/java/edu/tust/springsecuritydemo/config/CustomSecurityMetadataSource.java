@@ -36,9 +36,14 @@ public class CustomSecurityMetadataSource implements FilterInvocationSecurityMet
     public Collection<ConfigAttribute> getAttributes(Object obj) throws IllegalArgumentException {
 
         Collection<ConfigAttribute> configAttributes = new ArrayList<>();
-        String url = ((FilterInvocation) obj).getRequestUrl();
-        //TODO url校验
-        List<SysRole> sysRoles = sysRoleService.getSysRoleByUrl(url);
+        String requestUrl = ((FilterInvocation) obj).getRequestUrl();
+
+        //TODO url校验：此处逻辑可优化利用AntPathMatcher匹配Url后根据匹配Id获取权限
+        if (requestUrl != null && requestUrl.contains("?")) {
+            requestUrl = requestUrl.substring(0, requestUrl.indexOf("?"));
+        }
+        List<SysRole> sysRoles = sysRoleService.getSysRoleByUrl(requestUrl);
+
         for (SysRole sysRole : sysRoles) {
             configAttributes.add(new SecurityConfig(sysRole.getRoleName()));
         }
