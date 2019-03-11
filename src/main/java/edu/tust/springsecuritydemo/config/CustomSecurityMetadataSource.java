@@ -2,6 +2,7 @@ package edu.tust.springsecuritydemo.config;
 
 import edu.tust.springsecuritydemo.entity.SysRole;
 import edu.tust.springsecuritydemo.service.ISysRoleService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -39,8 +40,8 @@ public class CustomSecurityMetadataSource implements FilterInvocationSecurityMet
         String requestUrl = ((FilterInvocation) obj).getRequestUrl();
 
         //TODO url校验：此处逻辑可优化利用AntPathMatcher匹配Url后根据匹配Id获取权限
-        if (requestUrl != null && requestUrl.contains("?")) {
-            requestUrl = requestUrl.substring(0, requestUrl.indexOf("?"));
+        if (StringUtils.isNotBlank(requestUrl) && requestUrl.contains("?")) {
+            requestUrl = StringUtils.substringBefore(requestUrl, "?");
         }
         List<SysRole> sysRoles = sysRoleService.getSysRoleByUrl(requestUrl);
 
