@@ -8,11 +8,11 @@
         select distinct sr.* from `sys_role` sr
     </sql>
 
-    <select id="getSysRoleByUsername" resultType="SysRole">
+    <select id="getSysRoleByUserId" resultType="SysRole">
         <include refid="selectSysRole"/>
         left join `sys_user_role` sur on sr.id = sur.role_id
         left join `sys_user` su on sur.user_id = su.id
-        where su.username = #{username}
+        where su.id = #{userId}
     </select>
 
     <select id="getSysRoleByUrl" resultType="SysRole">

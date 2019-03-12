@@ -21,8 +21,8 @@ public class SysRoleServiceImpl implements ISysRoleService {
     ISysRoleDao sysRoleDao;
 
     @Override
-    public List<SysRole> getSysRoleByUsername(String username) {
-        return sysRoleDao.getSysRoleByUsername(username);
+    public List<SysRole> getSysRoleByUserId(Long userId) {
+        return sysRoleDao.getSysRoleByUserId(userId);
     }
 
     @Override

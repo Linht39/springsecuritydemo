@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ISysRoleDao {
 
-    List<SysRole> getSysRoleByUsername(String username);
+    List<SysRole> getSysRoleByUserId(Long userId);
 
     List<SysRole> getSysRoleByUrl(String url);
 }

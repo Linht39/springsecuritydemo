@@ -38,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         SysUser sysUser = sysUserService.getSysUserByUsername(username);
-        List<SysRole> sysRoles = sysRoleService.getSysRoleByUsername(username);
+        List<SysRole> sysRoles = sysRoleService.getSysRoleByUserId(sysUser.getId());
         sysUser.setSysRoles(sysRoles);
         return sysUser;
     }

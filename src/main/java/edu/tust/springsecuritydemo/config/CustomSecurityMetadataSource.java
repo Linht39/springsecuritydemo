@@ -53,7 +53,8 @@ public class CustomSecurityMetadataSource implements FilterInvocationSecurityMet
 
     @Override
     public Collection<ConfigAttribute> getAllConfigAttributes() {
-        return null;
+        Collection<ConfigAttribute> configAttributes = new ArrayList<>();
+        return configAttributes;
     }
 
     @Override
