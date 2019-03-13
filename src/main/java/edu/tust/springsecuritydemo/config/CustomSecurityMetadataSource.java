@@ -10,9 +10,9 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,7 +36,7 @@ public class CustomSecurityMetadataSource implements FilterInvocationSecurityMet
     @Override
     public Collection<ConfigAttribute> getAttributes(Object obj) throws IllegalArgumentException {
 
-        Collection<ConfigAttribute> configAttributes = new ArrayList<>();
+        Collection<ConfigAttribute> configAttributes = new Vector<>();
         String requestUrl = ((FilterInvocation) obj).getRequestUrl();
 
         //TODO url校验：此处逻辑可优化利用AntPathMatcher匹配Url后根据匹配Id获取权限
@@ -53,7 +53,7 @@ public class CustomSecurityMetadataSource implements FilterInvocationSecurityMet
 
     @Override
     public Collection<ConfigAttribute> getAllConfigAttributes() {
-        Collection<ConfigAttribute> configAttributes = new ArrayList<>();
+        Collection<ConfigAttribute> configAttributes = new Vector<>();
         return configAttributes;
     }
 

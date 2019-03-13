@@ -5,9 +5,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by IntelliJ IDEA.
@@ -45,7 +45,7 @@ public class SysUser implements UserDetails, Serializable {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        List<GrantedAuthority> grantedAuthorities = new Vector<>();
         List<SysRole> sysRoles = this.getSysRoles();
         for (SysRole sysRole : sysRoles) {
             grantedAuthorities.add(new SimpleGrantedAuthority(sysRole.getRoleName()));
