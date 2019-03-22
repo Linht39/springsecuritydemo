@@ -46,5 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(this.customFilterSecurityInterceptor(), FilterSecurityInterceptor.class);
         http.formLogin();
+        http.logout().logoutUrl("/logout").permitAll();
+        http.csrf().disable();
     }
 }

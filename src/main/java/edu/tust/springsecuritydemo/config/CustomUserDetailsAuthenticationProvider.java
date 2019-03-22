@@ -3,11 +3,13 @@ package edu.tust.springsecuritydemo.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,13 +32,28 @@ public class CustomUserDetailsAuthenticationProvider extends AbstractUserDetails
         this.customUserDetailsService = customUserDetailsService;
     }
 
+    /**
+     * 登录验证
+     *
+     * @param userDetails
+     * @param usernamePasswordAuthenticationToken
+     * @throws AuthenticationException
+     */
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
 
+        if (usernamePasswordAuthenticationToken.getCredentials() == null) {
+            throw new BadCredentialsException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
+        }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!userDetails.getUsername().equals(usernamePasswordAuthenticationToken.getPrincipal().toString()) || !passwordEncoder.matches(usernamePasswordAuthenticationToken.getCredentials().toString().trim(), userDetails.getPassword().trim())) {
+            throw new BadCredentialsException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
+        }
     }
 
     /**
-     * 登录验证
+     * 获取UserDetails
      *
      * @param username
      * @param usernamePasswordAuthenticationToken
@@ -50,15 +67,20 @@ public class CustomUserDetailsAuthenticationProvider extends AbstractUserDetails
             throw new AuthenticationServiceException("未注入UserDetailsService");
         }
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-        if (userDetails == null) {
+        UserDetails userDetails;
+
+        try {
+            userDetails = customUserDetailsService.loadUserByUsername(username);
+        } catch (UsernameNotFoundException e) {
             throw new UsernameNotFoundException(username);
+        } catch (Exception e) {
+            throw new InternalAuthenticationServiceException(e.getMessage(), e);
         }
 
-        if (userDetails.getUsername().equals(usernamePasswordAuthenticationToken.getPrincipal().toString()) && userDetails.getPassword().equals(usernamePasswordAuthenticationToken.getCredentials().toString())) {
+        if (userDetails == null) {
+            throw new InternalAuthenticationServiceException("UserDetailsService returned null, which is an interface contract violation");
+        } else {
             return userDetails;
         }
-
-        throw new BadCredentialsException(username + usernamePasswordAuthenticationToken.getCredentials());
     }
 }
